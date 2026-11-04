@@ -1,58 +1,31 @@
-# Reckless Pirate Academy — GitHub Pages
+# Reckless Pirate Academy — GitHub Pages + Google Sheets
 
-A free, mobile-friendly, single-file Torn City faction training website. It runs on GitHub Pages without a paid domain, hosting plan, installation, database, or API key.
+The website is hosted for free on GitHub Pages. Test results can be recorded in a **single private Google Spreadsheet**, with separate tabs for each test.
 
-## What is included
+## Tabs
 
-### Mission 01 — Pirates Requirements (new members)
-Two separate onboarding screens, each with links and a completion confirmation:
+- Pirates Requirements (reserved — confirmation submission is not yet connected)
+- Basics Test (active — 12-question Basics Test)
+- Chaining (reserved)
+- War Tactics (reserved)
+- Gym Training (reserved)
+- Organized Crimes (reserved)
 
-1. **Discord:** Join https://discord.gg/fbvYz5HYp and link your Torn account. Explains attack alerts, vault withdrawal pings, organized crime alerts, and chain alerts.
-2. **TornStats:** Register at https://www.tornstats.com/register and apply to the faction at https://www.tornstats.com/factions/show/7791/apply. Explains why the faction uses TornStats.
+Reserved tabs are created now, but will not receive scores until their courses have been added to the website and configured with server-side grading keys in the Apps Script.
 
-This is a **self-confirmation checklist**. The website cannot check whether someone actually joined Discord, linked Torn, or applied to TornStats. Members who haven't completed an item can follow the links and return to confirm.
+## Set up or update the Google Sheets collector
 
-### Mission 02 — Torn City Basics Test (after more than 3 days in the faction)
-- **12 multiple-choice questions**, covering cooldowns, happy jumps, energy, chaining, organized crimes, turtling, and respect.
-- **80% pass mark**, meaning **10 or more correct answers out of 12**.
-- Shows the **explanation immediately when the first selected answer is correct**. Incorrect selections are locked and marked incorrect; full answers and explanations are shown in the final review. No repeated guessing to earn more points.
-- Username and optional Player ID fields, printable review, and a copy-results button.
+1. Open your Google spreadsheet, then select **Extensions → Apps Script**.
+2. Replace the contents of `Code.gs` with the supplied `Google_Apps_Script.gs` file, then click **Save**.
+3. At the top of the Apps Script editor, select the function **setupCourseTabs** and click **Run**. Authorize it if prompted. The six tabs will appear in the spreadsheet. If an old `Results` tab exists and `Basics Test` does not, the function renames it, preserving historical data.
+4. Select **Deploy → Manage deployments**, edit the existing web app deployment, choose a **New version**, and click **Deploy**. If you have not deployed before, select **Deploy → New deployment → Web app**, **Execute as: Me**, **Who has access: Anyone**.
+5. Copy the deployment URL ending in `/exec` if it changed.
+6. In `index.html`, set `const RESULTS_WEB_APP_URL = 'YOUR_URL_HERE';`. If you only update the script and your existing URL is unchanged, you do not need to change `index.html`.
+7. Upload any changed website files to the `main` branch of your GitHub Pages repository.
+8. Submit a test attempt, then check the **Basics Test** tab for a new row.
 
-The **three-day rule is only displayed as policy**, not automatically enforced; this static website does not know how long a member has been in the faction.
+### Adding the next course
 
-## Publish or update on GitHub Pages
+Give the course an exact name in `COURSE_TABS`, add its 0-based answer key to `ANSWER_KEYS`, and make the website submit the same `course` name and answer indices. The script will automatically route its submissions into its corresponding tab.
 
-1. Extract the ZIP. Open your existing **reckless-pirate-academy** repository on GitHub.
-2. Update the `index.html` file **in the root of the repository** (not in a subfolder). On GitHub, select the existing `index.html` and use the pencil / Edit control to replace its contents, or upload the updated file and commit the replacement.
-3. Optionally replace `README.md` with this version.
-4. Commit to the branch your GitHub Pages settings use (typically `main`).
-5. In **Settings → Pages**, choose **Deploy from a branch** → `main` → `/(root)` → **Save**, if not already set.
-6. Visit `https://YOUR-GITHUB-USERNAME.github.io/reckless-pirate-academy/` (the exact URL is shown in Settings → Pages).
-7. If the previous version is displayed, check **Actions** for successful deployment and hard-refresh (`Ctrl+Shift+R`) or open a private browser window.
-
-**Do not upload the ZIP as the website itself.** Upload the extracted `index.html` and `README.md` files.
-
-## Editing questions later
-
-Open `index.html` in any text editor or directly in GitHub. Find this section in the JavaScript:
-
-`const questions = [`
-
-Each question is a JavaScript object with:
-- `topic`: short category heading
-- `q`: question text
-- `options`: four answers in A, B, C, D order
-- `correct`: index of the right answer (A=0, B=1, C=2, D=3)
-- `why`: explanation shown on a correct selection and in the end-of-test review
-
-Keep the objects separated by commas, and make sure the final `];` remains. The question count and passing threshold calculate automatically if you add/remove questions.
-
-To change onboarding steps, edit the `const requirements = [` block. Each requirement has a title, instructions, reasons, and completion choices.
-
-## Limitations and privacy
-
-- All code is **public** in a GitHub Pages repository. Never put Discord tokens, Torn API keys, passwords, private member data, or secret answer keys there. On a static page, quiz answers are visible to technically inclined players through the source code; this is a basic training tool, not a secure examination.
-- No central submission system: **results and confirmations are not sent to leadership or saved to a database**. Players can copy or print results and share them manually. A server-side service (e.g. Google Apps Script) would be needed to track attempts automatically.
-- Entered player names are not verified. This version does not interact with the Torn API.
-- No automatic three-day membership check.
-- This is an **unofficial Torn City fan project**, not affiliated with Torn.
+**Security:** GitHub Pages is public and the submission URL accepts unverified data. The submitted username/player ID is not proof of Torn identity. Keep the spreadsheet private, never publish private API keys, and verify important records with faction members.
