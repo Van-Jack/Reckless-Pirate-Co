@@ -1,38 +1,20 @@
-# Reckless Pirate Academy — Free GitHub Pages Starter
+# Reckless Pirate Academy — GitHub Pages
 
-This is a single-file static quiz website. It works on desktop and mobile without needing an API key, signup, web server, or paid domain.
+This version opens on an **Academy Home** page. Members choose **Torn City Basics** to open the beginner quiz briefing, enter their Torn username, and start the 10-question test. Two additional course cards are marked Coming Soon.
 
-## Publish to GitHub Pages (free)
+## Update an existing GitHub Pages site
 
-1. Sign in to https://github.com (create a free account if needed).
-2. Click **+** → **New repository**.
-3. Name it `reckless-pirate-academy` (or another name), set visibility to **Public**, and create it.
-4. Select **Add file → Upload files**, then upload **index.html** from this folder (not the ZIP itself). Commit changes.
-5. Open **Settings → Pages**. Under **Build and deployment**, select **Deploy from a branch**, then **main**, **/(root)** and **Save**.
-6. When GitHub publishes the website, the URL will have the format `https://YOUR-USERNAME.github.io/reckless-pirate-academy/` (substitute your actual GitHub username and repository name).
-7. Post that URL in your Torn faction mail, announcement, or forum.
+1. Open your existing `reckless-pirate-academy` repository on GitHub.
+2. Click `index.html`, then use the pencil icon (Edit this file), or use **Add file → Upload files** and replace the existing `index.html`.
+3. Commit the change to the `main` branch.
+4. Open your existing GitHub Pages URL. Refresh if it still displays the old version.
 
-It can take a few minutes for the site to become available. GitHub Free requires the repository to be public for GitHub Pages.
+Your repository **Settings → Pages** should be set to Deploy from branch `main` and `/(root)`. No new repository, domain, or paid plan is needed.
 
-## What works now
+## Important
 
-- 10 beginner-level Torn questions, including one select-all question
-- Mobile-friendly pirate theme
-- Player name and optional numeric player ID
-- Automatic scoring, 8/10 passing requirement
-- Review of answers, retry, copy score, print results
-- No third-party libraries, cookies, or external network requests
-
-## Important limitations
-
-This version has **no server or database**. Scores are shown to the player but **not automatically saved or reported to faction leaders**. Players can copy their score and send it to leadership, but results are self-reported and not authoritative. The quiz answer key is in the publicly visible JavaScript and is not tamper-resistant. Player names/IDs are also self-reported, not verified through Torn.
-
-For reliable centralized tracking, the next version can connect to a managed submission endpoint (such as a Google Apps Script web app + Google Sheets) with appropriate protections. Do not put secret keys or personal data into a public GitHub Pages repository.
-
-## Customize
-
-- Edit the heading text in `index.html`.
-- Change the `questions` JavaScript array near the bottom to edit questions and correct answers.
-- Change `points>=8` to another passing threshold if desired.
-
-Unofficial Torn City fan project; not affiliated with Torn.
+- Scores are graded on the user's own device. Results are not sent to faction leadership.
+- Members can copy their results manually. A public GitHub Pages site alone cannot securely store submissions.
+- Usernames are self-reported and not Torn-verified.
+- Quiz data and answers are included in the HTML/JavaScript and can be inspected by anyone.
+- To modify questions, edit the `questions` array in `index.html`.
