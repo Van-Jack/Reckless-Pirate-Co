@@ -1,5 +1,12 @@
+// Edit only this course to change Basics questions.
 // Torn City Basics Test — edit the 12 question objects here.
-const questions = [
+window.ACADEMY_COURSES.basics = {
+  id: "basics", title: "Torn City Basics Test", course: "Torn City Basics",
+  mission: "Mission 02 · After 3 days",
+  description: "12 questions covering cooldowns, happy jumps, energy management, organized crimes, chaining, turtling, and respect.",
+  notice: "For faction members with more than three days in Reckless Pirate. Membership duration is not automatically verified.",
+  passingPercent: 80,
+  questions: [
   {topic:'Cooldowns',q:'Which of the following items uses your Booster Cooldown in Torn City?',options:['Xanax','Erotic DVD','Morphine','Ecstasy'],correct:1,why:'Erotic DVDs use the Booster Cooldown, along with items such as candy and energy drinks. Xanax and Ecstasy use the Drug Cooldown, while Morphine uses the Medical Cooldown.'},
   {topic:'Nerve',q:'What is the primary purpose of Nerve in Torn City?',options:['To increase your battle stats when training at the gym.','To perform crimes, with different crimes requiring different amounts of Nerve.','To increase your chances of winning an attack against another player.','To reduce the cooldown time after taking drugs.'],correct:1,why:'Nerve is the resource used to commit crimes in Torn City. Different crimes require different amounts of Nerve, and your Nerve regenerates over time. Increasing your maximum Nerve and managing it efficiently can help you develop your criminal experience.'},
   {topic:'Purpose of a Happy Jump',q:'What is the primary purpose of performing a Happy Jump in Torn City?',options:['To increase your crime experience and nerve regeneration','To temporarily increase your maximum energy capacity','To maximize battle stat gains when training at the gym','To permanently increase your happiness and life'],correct:2,why:'A Happy Jump allows players to maximize battle stat gains by temporarily increasing happiness before gym training. Higher happiness improves training gains, particularly for newer players with lower battle stats.'},
@@ -12,4 +19,5 @@ const questions = [
   {topic:'Ranked War: Turtling',q:'What does "Turtling" mean during a Ranked War in Torn City?',options:['Attacking weaker opponents repeatedly to build up your faction’s war score.','Staying online without participating in attacks until the war is nearly over.','Making yourself unavailable for enemy attacks by staying hospitalized or traveling.','Using medical items to immediately recover from hospitalization and return to fighting.'],correct:2,why:'Turtling is a defensive strategy used during Ranked Wars. By remaining hospitalized or traveling, members can reduce opportunities for the opposing faction to attack them.'},
   {topic:'Ranked War: Why We Turtle',q:'Why do we use the "Turtling" strategy during Ranked Wars in Torn City?',options:['To avoid participating in the war while still receiving a payout.','To allow our faction members to regenerate energy faster for future attacks.','To prevent the opposing faction from earning easy war score by attacking our members, especially when we are not actively fighting.','To automatically reduce the opposing faction’s war score while we are hospitalized or traveling.'],correct:2,why:'Turtling reduces easy scoring opportunities for opponents, especially while our members are sleeping, offline, or unable to fight. It can help protect a lead and improve the faction’s chances.'},
   {topic:'Faction Respect',q:'Which attack outcome earns the most faction respect in Torn City, assuming the same target and conditions?',options:['Hospitalizing your opponent.','Mugging your opponent.','Leaving your opponent on the street.','Both A and C earn the same amount of respect.'],correct:3,why:'Hospitalizing and leaving your opponent earn the same base faction respect, while mugging earns only 75% of that amount. Leaving is often preferred during chaining because the opponent can become available to attack again sooner.'}
-];
+]
+};
