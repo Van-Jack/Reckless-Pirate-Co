@@ -34,9 +34,7 @@ document.querySelectorAll('[data-course]').forEach(node => {
     $('welcomeNotice').textContent = course.notice;
     $('start').textContent = 'Start ' + course.title + ' →';
     // This same intro screen already collects Torn username and optional Torn ID.
-    document.querySelector('#welcome .notice').lastChild.textContent = course.requireCorrectToAdvance
-      ? ' Incorrect answers can be retried, but only the first choice counts toward your score. Completed attempts are sent for recording.'
-      : ' Your first choice is final for each question. Completed attempts are sent for recording.';
+    document.querySelector('#welcome .notice').lastChild.textContent = ' Your first answer to each question counts toward your score. Completed attempts are sent for recording.';
     show('welcome');
   });
 });
@@ -140,19 +138,19 @@ $('start').addEventListener('click',()=>{
   renderQuestion();show('quiz');
 });
 function renderQuestion(){
-  const q=questions[index], first=answers[index], requiresCorrect=!!activeCourse.requireCorrectToAdvance;
+  const q=questions[index], first=answers[index], requiresCorrect=q.requireCorrectToAdvance === undefined ? !!activeCourse.requireCorrectToAdvance : !!q.requireCorrectToAdvance;
   const complete=requiresCorrect?mastered[index]:first!==null;
   $('counter').textContent='QUESTION '+(index+1)+' OF '+questions.length;
   $('progress').style.width=(index/questions.length*100)+'%';
   $('topic').textContent=q.topic;$('question').textContent=q.q;
   document.querySelector('#quiz .muted').textContent=requiresCorrect
     ? 'Choose the correct answer to continue. Your first selection counts toward your score.'
-    : 'Choose one answer. Your first selection counts.';
+    : 'Choose one answer to reveal the correct choice and explanation. Your first selection counts.';
   const container=$('choices');container.replaceChildren();
   q.options.forEach((opt,i)=>{
     const b=element('button',undefined,'choice');b.type='button';
     b.disabled=complete;
-    b.setAttribute('aria-pressed',String(requiresCorrect?complete&&i===q.correct:first===i));
+    b.setAttribute('aria-pressed',String(complete&&i===q.correct));
     b.append(element('span',String.fromCharCode(65+i),'letter'),element('span',opt));
     if(complete){if(i===q.correct)b.classList.add('correct');else if(!requiresCorrect&&i===first)b.classList.add('wrong')}
     b.addEventListener('click',()=>{
@@ -179,8 +177,8 @@ function renderQuestion(){
       feed.append(element('strong',first===q.correct?'✓ Correct answer!':'✓ Correct — next question unlocked!'),
         document.createTextNode(q.why));
     }else{
-      feed.append(element('strong','Not quite, Pirate.'),
-        document.createTextNode('Your first answer is marked incorrect. Review the explanation at the end.'));
+      feed.append(element('strong','✗ Not quite — correct answer: '+String.fromCharCode(65+q.correct)+'. '+q.options[q.correct]),
+        document.createTextNode(q.why));
     }
   }else{feed.className='feedback hide';feed.replaceChildren()}
   $('back').disabled=index===0;$('next').disabled=!complete;
@@ -188,7 +186,7 @@ function renderQuestion(){
 }
 $('back').addEventListener('click',()=>{if(index>0){index--;renderQuestion()}});
 $('next').addEventListener('click',()=>{
-  if(activeCourse.requireCorrectToAdvance&&!mastered[index])return;
+  if((questions[index].requireCorrectToAdvance === undefined ? !!activeCourse.requireCorrectToAdvance : !!questions[index].requireCorrectToAdvance)&&!mastered[index])return;
   if(answers[index]===null)return;
   if(index<questions.length-1){index++;renderQuestion()}else finish();
 });
@@ -197,15 +195,15 @@ function finish(){
   const earned=questions.reduce((n,q,i)=>n+Number(answers[i]===q.correct),0);
   const needed=Math.ceil(questions.length*(activeCourse.passingPercent/100));
   const pass=earned>=needed,when=new Date().toLocaleString(),pct=Math.round(100*earned/questions.length);
-  const requiresCorrect=!!activeCourse.requireCorrectToAdvance;
+  const requiresCorrect=questions.some(q=>q.requireCorrectToAdvance === undefined ? !!activeCourse.requireCorrectToAdvance : !!q.requireCorrectToAdvance);
   $('resultTitle').textContent=requiresCorrect?'War Tactics training complete!':pass?'Congratulations, Pirate!':'More training required, matey!';
   $('resultName').textContent=player+(playerId?' ['+playerId+']':'')+' · '+when;
   $('score').textContent=earned+' / '+questions.length;
   $('status').replaceChildren();
   $('status').append(element('span',pass?'PASS':'RETAKE','pill'+(pass?'':' fail')));
   $('details').textContent=requiresCorrect
-    ? 'All 12 questions were answered correctly before advancing. The score shown reflects only your FIRST choices, so leadership can see which topics needed practice.'
-    : 'Your first choices are reviewed below. Leadership can verify your submitted attempt in Google Sheets.';
+    ? 'Required-learning questions were mastered before advancing. All other answers revealed the correct choice immediately. Your score reflects only FIRST choices.'
+    : 'Each answer revealed the correct choice and explanation. Your score reflects only FIRST choices; leadership can verify your submitted attempt in Google Sheets.';
   lastSummary='Reckless Pirate Academy — '+activeCourse.title+'\nPlayer: '+player+(playerId?' ['+playerId+']':'')+'\nFirst-choice score: '+earned+'/'+questions.length+' ('+pct+'%) — '+(pass?'PASS':'RETAKE')+'\nCompleted: '+when+'\nSelf-reported; not verified by faction leadership.';
   $('review').replaceChildren();
   questions.forEach((q,i)=>{
