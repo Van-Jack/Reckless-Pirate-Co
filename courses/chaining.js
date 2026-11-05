@@ -1,7 +1,11 @@
-// Reckless Pirate Academy — Chaining Test (12 questions)
-// Course data only. To publish, connect this course in js/quiz.js and index.html.
-// Google Apps Script must also add an answer key for course "Chaining".
-const chainingQuestions = [
+// Edit only this course to change Chaining questions.
+window.ACADEMY_COURSES.chaining = {
+  id: "chaining", title: "Chaining Test", course: "Chaining",
+  mission: "Mission 03 · Chaining",
+  description: "12 questions on timers, bonus hits, chain responsibility, targets, respect, and chain coordination.",
+  notice: "Your first selection for each question is final. Coordinate with faction leadership during active chains.",
+  passingPercent: 80,
+  questions: [
   {
     topic: "Chain Timers",
     q: "Once a faction chain reaches 10 hits, how much time does the faction normally have to make another successful attack before the chain breaks?",
@@ -144,4 +148,5 @@ const chainingQuestions = [
     correct: 2,
     why: "Communication and teamwork are essential to maintaining a successful faction chain. If you are unable to participate, let your crew or faction leadership know so they can plan accordingly. This helps ensure enough members are available to keep the chain alive and reach its milestones. Remember, every pirate plays a part in keeping the ship sailing!"
   }
-];
+]
+};
