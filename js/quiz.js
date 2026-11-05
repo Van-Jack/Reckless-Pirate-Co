@@ -33,6 +33,10 @@ document.querySelectorAll('[data-course]').forEach(node => {
     $('welcomeDescription').textContent = course.description + ' Complete all ' + questions.length + ' questions to see your score.';
     $('welcomeNotice').textContent = course.notice;
     $('start').textContent = 'Start ' + course.title + ' →';
+    // This same intro screen already collects Torn username and optional Torn ID.
+    document.querySelector('#welcome .notice').lastChild.textContent = course.requireCorrectToAdvance
+      ? ' Incorrect answers can be retried, but only the first choice counts toward your score. Completed attempts are sent for recording.'
+      : ' Your first choice is final for each question. Completed attempts are sent for recording.';
     show('welcome');
   });
 });
@@ -125,25 +129,95 @@ $('reqCopy').addEventListener('click',async()=>{
   try{await navigator.clipboard.writeText(reqCopyText);$('reqCopy').textContent='Copied!';}
   catch(err){$('reqCopy').textContent='Copy unavailable — select and copy your summary';}
 });
-let index=0,answers=[],player='',playerId='',lastSummary='';
-$('start').addEventListener('click',()=>{player=$('name').value.trim();playerId=$('playerid').value.trim();if(!player){$('name').focus();return}if(playerId&&!/^\d+$/.test(playerId)){alert('Player ID must contain only numbers.');return}index=0;answers=questions.map(()=>null);renderQuestion();show('quiz')});
+let index=0,answers=[],mastered=[],player='',playerId='',lastSummary='';
+// answers[] always stores FIRST selections. mastered[] tracks eventual correct
+// answers only for courses that require a correct answer before moving on.
+$('start').addEventListener('click',()=>{
+  player=$('name').value.trim();playerId=$('playerid').value.trim();
+  if(!player){$('name').focus();return}
+  if(playerId&&!/^\d{1,12}$/.test(playerId)){alert('Player ID must contain 1–12 digits.');return}
+  index=0;answers=questions.map(()=>null);mastered=questions.map(()=>false);
+  renderQuestion();show('quiz');
+});
 function renderQuestion(){
-  const q=questions[index],choice=answers[index];$('counter').textContent='QUESTION '+(index+1)+' OF '+questions.length;
-  $('progress').style.width=(index/questions.length*100)+'%';$('topic').textContent=q.topic;$('question').textContent=q.q;
+  const q=questions[index], first=answers[index], requiresCorrect=!!activeCourse.requireCorrectToAdvance;
+  const complete=requiresCorrect?mastered[index]:first!==null;
+  $('counter').textContent='QUESTION '+(index+1)+' OF '+questions.length;
+  $('progress').style.width=(index/questions.length*100)+'%';
+  $('topic').textContent=q.topic;$('question').textContent=q.q;
+  document.querySelector('#quiz .muted').textContent=requiresCorrect
+    ? 'Choose the correct answer to continue. Your first selection counts toward your score.'
+    : 'Choose one answer. Your first selection counts.';
   const container=$('choices');container.replaceChildren();
-  q.options.forEach((opt,i)=>{const b=element('button',undefined,'choice');b.type='button';b.setAttribute('aria-pressed',String(choice===i));b.disabled=choice!==null;const l=element('span',String.fromCharCode(65+i),'letter');b.append(l,element('span',opt));if(choice===i)b.classList.add(i===q.correct?'correct':'wrong');b.addEventListener('click',()=>{if(answers[index]!==null)return;answers[index]=i;renderQuestion()});container.append(b)});
-  const feed=$('feedback');feed.className='feedback hide';feed.replaceChildren();if(choice!==null){feed.classList.remove('hide');if(choice===q.correct){feed.classList.add('good');feed.append(element('strong','✓ Correct answer!'),document.createTextNode(q.why))}else{feed.classList.add('bad');feed.append(element('strong','Not quite, Pirate.'),document.createTextNode('This answer will be marked incorrect. You can review the correct answer and explanation at the end of the test.'))}}
-  $('back').disabled=index===0;$('next').disabled=choice===null;$('next').textContent=index===questions.length-1?'Finish & grade →':'Next question →';
+  q.options.forEach((opt,i)=>{
+    const b=element('button',undefined,'choice');b.type='button';
+    b.disabled=complete;
+    b.setAttribute('aria-pressed',String(requiresCorrect?complete&&i===q.correct:first===i));
+    b.append(element('span',String.fromCharCode(65+i),'letter'),element('span',opt));
+    if(complete){if(i===q.correct)b.classList.add('correct');else if(!requiresCorrect&&i===first)b.classList.add('wrong')}
+    b.addEventListener('click',()=>{
+      if((requiresCorrect&&mastered[index])||(!requiresCorrect&&answers[index]!==null))return;
+      if(answers[index]===null)answers[index]=i;
+      if(requiresCorrect){
+        if(i===q.correct){mastered[index]=true;renderQuestion();}
+        else {
+          const feedback=$('feedback');feedback.className='feedback bad';
+          feedback.replaceChildren(element('strong','Not quite — try again.'),
+            document.createTextNode('The next question stays locked until you choose the correct answer. Your initial choice has been recorded.'));
+          container.querySelectorAll('button').forEach(x=>{x.classList.remove('wrong');x.setAttribute('aria-pressed','false')});
+          b.classList.add('wrong');b.setAttribute('aria-pressed','true');
+        }
+      }else renderQuestion();
+    });
+    container.append(b);
+  });
+  const feed=$('feedback');
+  if(complete){
+    feed.className='feedback '+(requiresCorrect||first===q.correct?'good':'bad');
+    feed.replaceChildren();
+    if(requiresCorrect||first===q.correct){
+      feed.append(element('strong',first===q.correct?'✓ Correct answer!':'✓ Correct — next question unlocked!'),
+        document.createTextNode(q.why));
+    }else{
+      feed.append(element('strong','Not quite, Pirate.'),
+        document.createTextNode('Your first answer is marked incorrect. Review the explanation at the end.'));
+    }
+  }else{feed.className='feedback hide';feed.replaceChildren()}
+  $('back').disabled=index===0;$('next').disabled=!complete;
+  $('next').textContent=index===questions.length-1?'Finish & grade →':'Next question →';
 }
 $('back').addEventListener('click',()=>{if(index>0){index--;renderQuestion()}});
-$('next').addEventListener('click',()=>{if(answers[index]===null)return;if(index<questions.length-1){index++;renderQuestion()}else finish()});
+$('next').addEventListener('click',()=>{
+  if(activeCourse.requireCorrectToAdvance&&!mastered[index])return;
+  if(answers[index]===null)return;
+  if(index<questions.length-1){index++;renderQuestion()}else finish();
+});
 $('quizHome').addEventListener('click',()=>{if(confirm('Leave this test? Your current answers will be lost.'))show('home')});
-function finish(){const earned=questions.reduce((n,q,i)=>n+Number(answers[i]===q.correct),0),needed=Math.ceil(questions.length*(activeCourse.passingPercent/100)),pass=earned>=needed,when=new Date().toLocaleString(),pct=Math.round(100*earned/questions.length);
-  $('resultTitle').textContent=pass?'Congratulations, Pirate!':'More training required, matey!';$('resultName').textContent=player+(playerId?' ['+playerId+']':'')+' · '+when;$('score').textContent=earned+' / '+questions.length;
-  $('status').replaceChildren();const pill=element('span',pass?'PASS':'RETAKE','pill'+(pass?'':' fail'));$('status').append(pill);
-  $('details').textContent='Your answers are reviewed below. If the results connection is enabled, your attempt will be sent for recording. You can also copy your results.';
-  lastSummary='Reckless Pirate Academy — '+activeCourse.title+'\nPlayer: '+player+(playerId?' ['+playerId+']':'')+'\nScore: '+earned+'/'+questions.length+' ('+pct+'%) — '+(pass?'PASS':'RETAKE')+'\nCompleted: '+when+'\nSelf-reported; not verified by faction leadership.';
-  $('review').replaceChildren();questions.forEach((q,i)=>{const right=answers[i]===q.correct;const div=element('div',undefined,'review');div.append(element('strong',(i+1)+'. '+q.q),element('div','Your answer: '+q.options[answers[i]]+' — '+(right?'Correct':'Incorrect'),right?'goodtext':'badtext'),element('p','Correct answer: '+String.fromCharCode(65+q.correct)+'. '+q.options[q.correct]),element('p',q.why,'muted'));$('review').append(div)});show('results');sendResults({course:activeCourse.course,name:player,playerId:playerId,answers:answers.slice(),submittedAt:new Date().toISOString()});
+function finish(){
+  const earned=questions.reduce((n,q,i)=>n+Number(answers[i]===q.correct),0);
+  const needed=Math.ceil(questions.length*(activeCourse.passingPercent/100));
+  const pass=earned>=needed,when=new Date().toLocaleString(),pct=Math.round(100*earned/questions.length);
+  const requiresCorrect=!!activeCourse.requireCorrectToAdvance;
+  $('resultTitle').textContent=requiresCorrect?'War Tactics training complete!':pass?'Congratulations, Pirate!':'More training required, matey!';
+  $('resultName').textContent=player+(playerId?' ['+playerId+']':'')+' · '+when;
+  $('score').textContent=earned+' / '+questions.length;
+  $('status').replaceChildren();
+  $('status').append(element('span',pass?'PASS':'RETAKE','pill'+(pass?'':' fail')));
+  $('details').textContent=requiresCorrect
+    ? 'All 12 questions were answered correctly before advancing. The score shown reflects only your FIRST choices, so leadership can see which topics needed practice.'
+    : 'Your first choices are reviewed below. Leadership can verify your submitted attempt in Google Sheets.';
+  lastSummary='Reckless Pirate Academy — '+activeCourse.title+'\nPlayer: '+player+(playerId?' ['+playerId+']':'')+'\nFirst-choice score: '+earned+'/'+questions.length+' ('+pct+'%) — '+(pass?'PASS':'RETAKE')+'\nCompleted: '+when+'\nSelf-reported; not verified by faction leadership.';
+  $('review').replaceChildren();
+  questions.forEach((q,i)=>{
+    const right=answers[i]===q.correct,div=element('div',undefined,'review');
+    div.append(element('strong',(i+1)+'. '+q.q),
+      element('div','First answer: '+q.options[answers[i]]+' — '+(right?'Correct':'Incorrect'),right?'goodtext':'badtext'),
+      element('p','Correct answer: '+String.fromCharCode(65+q.correct)+'. '+q.options[q.correct]),
+      element('p',q.why,'muted'));
+    $('review').append(div);
+  });
+  show('results');
+  sendResults({course:activeCourse.course,name:player,playerId:playerId,answers:answers.slice(),submittedAt:new Date().toISOString()});
 }
 // Apps Script endpoint accepts form submissions. A cross-origin POST cannot confirm saved rows
 // from the browser, so the status says 'submitted' rather than claiming success.
