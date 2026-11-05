@@ -2,10 +2,10 @@
 // Torn City Basics Test — edit the 12 question objects here.
 window.ACADEMY_COURSES.basics = {
   id: "basics", title: "Torn City Basics Test", course: "Torn City Basics",
-  mission: "Mission 02 · After 3 days",
+  mission: "Mission 02 · On Day 30",
   description: "12 questions covering cooldowns, happy jumps, energy management, organized crimes, chaining, turtling, and respect.",
   notice: "For faction members with more than three days in Reckless Pirate. Membership duration is not automatically verified.",
-  passingPercent: 80,
+  passingPercent: 85,
   questions: [
   {topic:'Cooldowns',q:'Which of the following items uses your Booster Cooldown in Torn City?',options:['Xanax','Erotic DVD','Morphine','Ecstasy'],correct:1,why:'Erotic DVDs use the Booster Cooldown, along with items such as candy and energy drinks. Xanax and Ecstasy use the Drug Cooldown, while Morphine uses the Medical Cooldown.'},
   {topic:'Nerve',q:'What is the primary purpose of Nerve in Torn City?',options:['To increase your battle stats when training at the gym.','To perform crimes, with different crimes requiring different amounts of Nerve.','To increase your chances of winning an attack against another player.','To reduce the cooldown time after taking drugs.'],correct:1,why:'Nerve is the resource used to commit crimes in Torn City. Different crimes require different amounts of Nerve, and your Nerve regenerates over time. Increasing your maximum Nerve and managing it efficiently can help you develop your criminal experience.'},
