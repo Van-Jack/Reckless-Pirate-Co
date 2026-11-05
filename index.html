@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#26180f">
-<meta name="description" content="Reckless Pirate Academy: faction onboarding and Torn City basics training.">
+<meta name="description" content="Reckless Pirate Academy: faction requirements, rules, and Torn City training.">
 <title>Reckless Pirate Academy</title>
 <link rel="stylesheet" href="css/style.css?v=4">
 </head>
@@ -12,30 +12,41 @@
 <header><small>☠ &nbsp; RECKLESS PIRATE &nbsp; ☠</small><h1>PIRATE ACADEMY</h1><p class="subtitle">Learn the ropes. Prove your worth. Earn your stripes.</p></header>
 <main class="wrap">
 <section class="panel" id="home">
-  <div class="homehero"><div class="eyebrow">Welcome aboard, pirate</div><h2>Every great pirate starts somewhere.</h2><p class="muted">Join the crew, learn our expectations, and sharpen your knowledge of Torn City. Join TornStats to complete required onboarding. Discord is optional but recommended. Then take the Basics Test once you've been with Reckless Pirate for more than three days.</p></div>
+  <div class="homehero"><div class="eyebrow">Welcome aboard, pirate</div><h2>Every great pirate starts somewhere.</h2><p class="muted">Join the crew, learn our expectations, and sharpen your knowledge of Torn City. Complete TornStats registration, review the optional Discord invitation, and acknowledge our faction rules. The Basics Test is intended for members who have been with Reckless Pirate for more than three days.</p></div>
   <h2>Choose Your Training</h2>
   <div class="coursegrid">
-    <button class="course" id="openRequirements" type="button"><span class="tag">MISSION 01 · NEW RECRUITS</span><h3>🏴‍☠️ Pirates Requirements</h3><p>Register with TornStats (required), then explore our recommended Discord server for crew alerts and communication.</p><span class="cta">TornStats required · Discord optional →</span></button>
+    <button class="course" id="openRequirements" type="button"><span class="tag">MISSION 01 · NEW RECRUITS</span><h3>🏴‍☠️ Pirate Requirements &amp; Rules</h3><p>Join TornStats, decide whether Discord is right for you, and acknowledge our five crew rules.</p><span class="cta">7 steps · Start onboarding →</span></button>
     <button class="course" id="openBasics" data-course="basics" type="button"><span class="tag">MISSION 02 · AFTER 3 DAYS</span><h3>⚓ Torn City Basics Test</h3><p>Test your understanding of cooldowns, happy jumps, energy, organized crimes, and faction strategy.</p><span class="cta">12 questions · Start test →</span></button>
     <button class="course" id="openChaining" data-course="chaining" type="button"><span class="tag">MISSION 03 · AVAILABLE</span><h3>⛓️ Chaining</h3><p>Learn chain timing, bonus hits, chain management, and respect strategies.</p><span class="cta">12 questions · Start test →</span></button>
     <div class="course pending" data-course="war-tactics" aria-label="War Tactics test coming soon"><span class="tag">MISSION 04 · COMING SOON</span><h3>⚔️ War Tactics</h3><p>Prepare for Ranked Wars, target selection, turtling, and coordination.</p><span class="cta">Test coming soon</span></div>
     <div class="course pending" data-course="gym-training" aria-label="Gym Training test coming soon"><span class="tag">MISSION 05 · COMING SOON</span><h3>💪 Gym Training</h3><p>Build better battle stats through efficient training, energy use, and happy jumps.</p><span class="cta">Test coming soon</span></div>
     <div class="course pending" data-course="organized-crimes" aria-label="Organized Crimes test coming soon"><span class="tag">MISSION 06 · COMING SOON</span><h3>🗝️ Organized Crimes</h3><p>Understand OC participation, roles, equipment, and readiness.</p><span class="cta">Test coming soon</span></div>
   </div>
-  <div class="info"><strong>How it works:</strong> Complete TornStats registration first. Discord is offered on a separate, optional screen you can skip. Choose any available test, enter your Torn username, and answer the questions. Basics and Chaining attempts are sent to their own tabs in Google Sheets. The three-day requirement is a faction policy, not automatically checked by this website.</div>
+  <div class="info"><strong>How it works:</strong> Begin onboarding by entering your Torn username and ID. Complete TornStats, choose whether to join Discord, then acknowledge each faction rule. Available knowledge tests keep their own scoring and result tabs in Google Sheets. The three-day requirement is a faction policy, not automatically checked by this website.</div>
+</section>
+<section class="panel hide" id="requirementIntro">
+  <div class="homebar"><span class="eyebrow">Mission 01 · New recruits</span><button class="secondary" type="button" data-home>← Academy Home</button></div>
+  <h2>Pirate Requirements &amp; Rules</h2>
+  <p class="muted">Before we sail together, let's get you registered and make sure you understand the crew's expectations. You'll complete TornStats, review Discord as an optional resource, and acknowledge five faction rules.</p>
+  <label for="reqName">Torn username</label><input id="reqName" maxlength="40" autocomplete="nickname" placeholder="Your Torn username" required>
+  <label for="reqPlayerId">Torn Player ID</label><input id="reqPlayerId" inputmode="numeric" pattern="[0-9]*" maxlength="12" placeholder="Your numeric Torn ID" required>
+  <div class="notice">Your name, Torn ID, Discord choice, and rule acknowledgments will be submitted to the Pirates Requirements tab when you finish. The website cannot independently verify your Torn identity or TornStats membership.</div>
+  <div class="actions"><button class="primary" id="reqStart" type="button">Begin onboarding →</button></div>
 </section>
 <section class="panel hide" id="requirementScreen">
   <div class="homebar"><span class="eyebrow" id="reqCounter">ONBOARDING</span><button class="secondary" type="button" data-home>← Academy Home</button></div>
   <div class="progressline"><div id="reqProgress" style="width:0%"></div></div>
   <div id="reqContent"></div>
   <div class="feedback hide" id="reqNote" role="status"></div>
-  <div class="actions"><button class="secondary" id="reqBack" type="button">← Previous</button><button class="primary" id="reqConfirm" type="button">I've completed this requirement →</button><button class="secondary" id="reqNotYet" type="button">Not completed yet</button></div>
+  <div class="actions"><button class="secondary" id="reqBack" type="button">← Previous</button><button class="primary" id="reqConfirm" type="button" disabled>Continue →</button></div>
 </section>
 <section class="panel hide" id="requirementDone">
   <div class="homebar"><span class="eyebrow">Onboarding complete</span><button class="secondary" type="button" data-home>⌂ Academy Home</button></div>
-  <h2>Welcome aboard, Pirate! ☠</h2><p class="muted">You've confirmed that you registered with TornStats and applied to Reckless Pirate. Joining Discord is optional but strongly recommended for alerts and coordination.</p>
-  <div class="notice">These are self-reported confirmations. Leadership will need to verify your TornStats registration separately; Discord remains optional and can be joined at any time. These onboarding confirmations are not yet transmitted to Google Sheets. The Basics Test is intended for members with more than three days in the faction.</div>
-  <div class="actions"><button class="primary" type="button" data-home>Return to Academy Home</button></div>
+  <h2>Welcome aboard, Pirate! ☠</h2>
+  <p class="muted" id="reqDoneSummary"></p>
+  <div class="notice" id="reqSubmissionStatus" role="status">Preparing your completion record…</div>
+  <p class="muted small">These confirmations are self-reported. Leadership should verify TornStats and any other membership requirements separately.</p>
+  <div class="actions"><button class="secondary" id="reqCopy" type="button">Copy my acknowledgment</button><button class="primary" type="button" data-home>Return to Academy Home</button></div>
 </section>
 <section class="panel hide" id="welcome">
   <div class="homebar"><span class="eyebrow">Mission briefing</span><button class="secondary" type="button" data-home>← Academy Home</button></div>
@@ -63,12 +74,12 @@
 </main>
 <script src="js/config.js"></script>
 <script>window.ACADEMY_COURSES = Object.create(null);</script>
-<script src="courses/requirements.js"></script>
+<script src="courses/requirements.js?v=5"></script>
 <script src="courses/basics.js"></script>
 <script src="courses/chaining.js"></script>
 <script src="courses/war-tactics.js"></script>
 <script src="courses/gym-training.js"></script>
 <script src="courses/organized-crimes.js"></script>
-<script src="js/quiz.js"></script>
+<script src="js/quiz.js?v=5"></script>
 </body>
 </html>
