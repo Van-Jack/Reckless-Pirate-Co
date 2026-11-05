@@ -1,5 +1,5 @@
 // Reckless Pirate Academy — War Tactics (12 questions)
-// Every question requires a correct answer before advancing.
+// Only question 1 requires a correct answer before advancing.
 // The quiz engine records the FIRST selected answer for scoring and Google Sheets.
 window.ACADEMY_COURSES['war-tactics'] = {
   id: 'war-tactics',
@@ -7,12 +7,13 @@ window.ACADEMY_COURSES['war-tactics'] = {
   course: 'War Tactics',
   mission: 'Mission 04 · War Tactics',
   description: '12 questions covering war tools, targets, turtling, chaining, assists, and coordinated attacks.',
-  notice: 'Select the correct answer to unlock each next question. You may retry incorrect answers, but your first answer is recorded for your score and leadership.',
+  notice: 'Question 1 requires a correct answer before advancing. All other questions reveal the correct answer immediately; your first selections are recorded.',
   passingPercent: 80,
-  requireCorrectToAdvance: true,
+  requireCorrectToAdvance: false,
   questions: [
     {
       topic: "War Tools & Preparation",
+      requireCorrectToAdvance: true,
       q: "Before a Ranked War, which tools can help you identify suitable opponents?",
       options: ["FFScouter, Torn PDA, and compatible war userscripts.", "Torn’s item market, casino, and travel agency.", "Only an opponent’s Torn level and current life.", "TornStats alone, without checking battle-stat estimates or war information."],
       correct: 0,
