@@ -5,7 +5,7 @@ const requirements = [
    intro:'TornStats membership is required for all crew members. This helps the faction organize information, monitor progress, and prepare for faction activities.',
    steps:[
      ['Create your TornStats account','https://www.tornstats.com/register'],
-     ['Connect your Torn account using a Limited Access API key from Torn settings',null],
+     ['Connect your Torn account using a Full Access API key from Torn settings',null],
      ['Apply to Reckless Pirate on TornStats','https://www.tornstats.com/factions/show/7791/apply'],
      ['Leadership will review your application',null]
    ],why:[
