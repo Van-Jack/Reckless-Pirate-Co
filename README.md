@@ -1,42 +1,39 @@
-# Reckless Pirate Academy — GitHub Pages + Google Sheets
+[README.md](https://github.com/user-attachments/files/34400965/README.md)
+# Reckless Pirate Academy — Modular GitHub Pages Website
 
-The website is hosted for free on GitHub Pages. Test results can be recorded in a **single private Google Spreadsheet**, with separate tabs for each test.
+The **home page and both working courses** are preserved from the original website. Each upcoming course is still marked **Coming Soon**.
 
-## Tabs
+## Files
 
-- Pirates Requirements (reserved — confirmation submission is not yet connected)
-- Basics Test (active — 12-question Basics Test)
-- Chaining (reserved)
-- War Tactics (reserved)
-- Gym Training (reserved)
-- Organized Crimes (reserved)
+- `index.html` — home page and quiz screen layouts; loads the other files.
+- `css/style.css` — wooden ship / grungy pirate design.
+- `js/config.js` — public Google Apps Script results endpoint.
+- `js/quiz.js` — quiz screens, grading presentation, and result submission.
+- `courses/requirements.js` — Discord and TornStats onboarding.
+- `courses/basics.js` — all 12 approved Basics Test questions.
+- `courses/chaining.js`, `war-tactics.js`, `gym-training.js`, `organized-crimes.js` — placeholders for upcoming courses.
 
-The four upcoming tests appear on the home page as **Coming Soon** cards. They are not clickable until their questions have been written and connected. Reserved tabs are created now, but will not receive scores until their courses have been added to the website and configured with server-side grading keys in the Apps Script.
+## Install in your EXISTING repository
 
-## Set up or update the Google Sheets collector
+1. Download and extract the ZIP package.
+2. In your GitHub repository, replace the placeholder content of each matching course file and `css/style.css`, `js/quiz.js`. Create `js/config.js`.
+3. **Replace `index.html` LAST**. Keep every filename and folder exactly as shown.
+4. Commit changes on `main`. GitHub Pages deploys automatically.
+5. Hard refresh the public website and test both onboarding and Basics, then check the Basics Test Google Sheet tab after a test.
 
-1. Open your Google spreadsheet, then select **Extensions → Apps Script**.
-2. Replace the contents of `Code.gs` with the supplied `Google_Apps_Script.gs` file, then click **Save**.
-3. At the top of the Apps Script editor, select the function **setupCourseTabs** and click **Run**. Authorize it if prompted. The six tabs will appear in the spreadsheet. If an old `Results` tab exists and `Basics Test` does not, the function renames it, preserving historical data.
-4. Select **Deploy → Manage deployments**, edit the existing web app deployment, choose a **New version**, and click **Deploy**. If you have not deployed before, select **Deploy → New deployment → Web app**, **Execute as: Me**, **Who has access: Anyone**.
-5. Copy the deployment URL ending in `/exec` if it changed.
-6. The supplied `index.html` already contains the Apps Script deployment URL you provided. If you redeploy under a new URL, update `RESULTS_WEB_APP_URL` in `index.html`.
-7. Upload any changed website files to the `main` branch of your GitHub Pages repository.
-8. Submit a test attempt, then check the **Basics Test** tab for a new row.
+You may upload these files using GitHub's **Add file → Upload files** command, as long as paths are preserved, or edit each file in the GitHub web editor.
 
-### Adding the next course
+## Updating later
 
-Give the course an exact name in `COURSE_TABS`, add its 0-based answer key to `ANSWER_KEYS`, and make the website submit the same `course` name and answer indices. The script will automatically route its submissions into its corresponding tab.
+- To change Basics questions: edit only `courses/basics.js`.
+- To update Discord/TornStats: edit only `courses/requirements.js`.
+- To change the theme: edit only `css/style.css`.
+- To change submission settings: edit `js/config.js`.
 
-**Security:** GitHub Pages is public and the submission URL accepts unverified data. The submitted username/player ID is not proof of Torn identity. Keep the spreadsheet private, never publish private API keys, and verify important records with faction members.
+Future courses have placeholder files and visible Coming Soon cards. **Adding quiz questions to a placeholder alone will not activate the course yet**: when each course is built, we will also enable it in the quiz engine/home page and add its server-side answer key to Google Apps Script. This prevents ungraded results from being sent as if they were verified.
 
-## This update
+## Google Sheets
 
-The home page now shows Pirates Requirements, Basics Test, and four upcoming courses (Chaining, War Tactics, Gym Training, Organized Crimes). The Basics Test home card no longer advertises an 80% pass requirement; the underlying grading threshold remains 80%. Existing tests and questions are unchanged.
+The web-app endpoint is configured in `js/config.js`. The `Torn City Basics` course sends answer indices to the Google Apps Script, which should grade and append them in the `Basics Test` tab. The website currently cannot verify that a submission was saved; check Sheets after a test. New courses need their own answer key in the Apps Script before their scores can be recorded.
 
-
-## Grungy pirate ship theme
-
-The main `index.html` includes a wooden ship plank background, weathered deck panels, rope-toned borders and antique brass buttons. All background effects are drawn in CSS, so there are no additional image files or image hosting costs. Fonts use free Google Fonts with local serif fallbacks.
-
-To update GitHub Pages, replace `index.html` in the root of the existing repository and commit to `main`. No new branch or repo is needed. Keep the existing Google Apps Script deployed for results.
+No domain purchase or paid hosting is required. Never upload private Torn API keys or credentials to this public GitHub repository.
