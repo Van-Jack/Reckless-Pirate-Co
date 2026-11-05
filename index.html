@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#26180f">
 <meta name="description" content="Reckless Pirate Academy: faction onboarding and Torn City basics training.">
 <title>Reckless Pirate Academy</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
 <header><small>☠ &nbsp; RECKLESS PIRATE &nbsp; ☠</small><h1>PIRATE ACADEMY</h1><p class="subtitle">Learn the ropes. Prove your worth. Earn your stripes.</p></header>
@@ -16,13 +16,13 @@
   <h2>Choose Your Training</h2>
   <div class="coursegrid">
     <button class="course" id="openRequirements" type="button"><span class="tag">MISSION 01 · NEW RECRUITS</span><h3>🏴‍☠️ Pirates Requirements</h3><p>Register with TornStats (required), then explore our recommended Discord server for crew alerts and communication.</p><span class="cta">TornStats required · Discord optional →</span></button>
-    <button class="course" id="openBasics" type="button"><span class="tag">MISSION 02 · AFTER 3 DAYS</span><h3>⚓ Torn City Basics Test</h3><p>Test your understanding of cooldowns, happy jumps, energy, organized crimes, and faction strategy.</p><span class="cta">12 questions · Start test →</span></button>
-    <div class="course pending" aria-label="Chaining test coming soon"><span class="tag">MISSION 03 · COMING SOON</span><h3>⛓️ Chaining</h3><p>Learn chain timing, maintaining a chain, and working together to earn respect.</p><span class="cta">Test coming soon</span></div>
-    <div class="course pending" aria-label="War Tactics test coming soon"><span class="tag">MISSION 04 · COMING SOON</span><h3>⚔️ War Tactics</h3><p>Prepare for Ranked Wars, target selection, turtling, and coordination.</p><span class="cta">Test coming soon</span></div>
-    <div class="course pending" aria-label="Gym Training test coming soon"><span class="tag">MISSION 05 · COMING SOON</span><h3>💪 Gym Training</h3><p>Build better battle stats through efficient training, energy use, and happy jumps.</p><span class="cta">Test coming soon</span></div>
-    <div class="course pending" aria-label="Organized Crimes test coming soon"><span class="tag">MISSION 06 · COMING SOON</span><h3>🗝️ Organized Crimes</h3><p>Understand OC participation, roles, equipment, and readiness.</p><span class="cta">Test coming soon</span></div>
+    <button class="course" id="openBasics" data-course="basics" type="button"><span class="tag">MISSION 02 · AFTER 3 DAYS</span><h3>⚓ Torn City Basics Test</h3><p>Test your understanding of cooldowns, happy jumps, energy, organized crimes, and faction strategy.</p><span class="cta">12 questions · Start test →</span></button>
+    <button class="course" id="openChaining" data-course="chaining" type="button"><span class="tag">MISSION 03 · AVAILABLE</span><h3>⛓️ Chaining</h3><p>Learn chain timing, bonus hits, chain management, and respect strategies.</p><span class="cta">12 questions · Start test →</span></button>
+    <div class="course pending" data-course="war-tactics" aria-label="War Tactics test coming soon"><span class="tag">MISSION 04 · COMING SOON</span><h3>⚔️ War Tactics</h3><p>Prepare for Ranked Wars, target selection, turtling, and coordination.</p><span class="cta">Test coming soon</span></div>
+    <div class="course pending" data-course="gym-training" aria-label="Gym Training test coming soon"><span class="tag">MISSION 05 · COMING SOON</span><h3>💪 Gym Training</h3><p>Build better battle stats through efficient training, energy use, and happy jumps.</p><span class="cta">Test coming soon</span></div>
+    <div class="course pending" data-course="organized-crimes" aria-label="Organized Crimes test coming soon"><span class="tag">MISSION 06 · COMING SOON</span><h3>🗝️ Organized Crimes</h3><p>Understand OC participation, roles, equipment, and readiness.</p><span class="cta">Test coming soon</span></div>
   </div>
-  <div class="info"><strong>How it works:</strong> Complete TornStats registration first. Discord is offered on a separate, optional screen you can skip. For the Basics Test, choose a training mission, enter your Torn username, and answer the questions. Basics Test results can be sent to the faction results sheet after you connect Google Apps Script. The three-day requirement is a faction policy, not automatically checked by this website.</div>
+  <div class="info"><strong>How it works:</strong> Complete TornStats registration first. Discord is offered on a separate, optional screen you can skip. Choose any available test, enter your Torn username, and answer the questions. Basics and Chaining attempts are sent to their own tabs in Google Sheets. The three-day requirement is a faction policy, not automatically checked by this website.</div>
 </section>
 <section class="panel hide" id="requirementScreen">
   <div class="homebar"><span class="eyebrow" id="reqCounter">ONBOARDING</span><button class="secondary" type="button" data-home>← Academy Home</button></div>
@@ -39,11 +39,11 @@
 </section>
 <section class="panel hide" id="welcome">
   <div class="homebar"><span class="eyebrow">Mission briefing</span><button class="secondary" type="button" data-home>← Academy Home</button></div>
-  <div class="eyebrow">Mission 02 · After 3 days</div><h2>Torn City: Basics Test</h2><p class="muted">12 questions covering cooldowns, happy jumps, energy management, organized crimes, chaining, turtling, and respect. Complete all 12 questions to see your score and review your answers.</p>
+  <div class="eyebrow" id="welcomeMission">Mission briefing</div><h2 id="welcomeTitle">Training Test</h2><p class="muted" id="welcomeDescription"></p>
   <label for="name">Torn username</label><input id="name" maxlength="40" autocomplete="nickname" placeholder="Your Torn username" required>
   <label for="playerid">Torn Player ID (optional)</label><input id="playerid" inputmode="numeric" pattern="[0-9]*" maxlength="12" placeholder="Your numeric player ID">
-  <div class="notice">For faction members with more than three days in Reckless Pirate. You'll see an explanation after a correct selection. Your first choice is final for each question. Membership duration is not automatically checked. Once the results connection is configured, completed test attempts are submitted to leadership.</div>
-  <div class="actions"><button class="primary" id="start" type="button">Start the Basics Test →</button></div>
+  <div class="notice"><span id="welcomeNotice"></span> You'll see an explanation after a correct selection. Your first choice is final for each question. Completed test attempts are submitted for recording; leadership must verify receipt in Google Sheets.</div>
+  <div class="actions"><button class="primary" id="start" type="button">Start Test →</button></div>
 </section>
 <section class="panel hide" id="quiz">
   <div class="homebar"><span class="eyebrow" id="counter"></span><button class="secondary" id="quizHome" type="button">⌂ Home</button></div>
@@ -62,6 +62,7 @@
 <footer>Reckless Pirate Academy · Unofficial Torn City fan project · Not affiliated with Torn</footer>
 </main>
 <script src="js/config.js"></script>
+<script>window.ACADEMY_COURSES = Object.create(null);</script>
 <script src="courses/requirements.js"></script>
 <script src="courses/basics.js"></script>
 <script src="courses/chaining.js"></script>
